@@ -1,0 +1,3 @@
+using Microsoft.AspNetCore.Mvc; using Store_Tec_API_GET.Data;
+namespace Store_Tec_API_GET.Controllers;
+[ApiController][Route("api/[controller]")] public class ProductosController(StoreData d):ControllerBase{[HttpGet]public IActionResult Get(string? buscar,int? categoriaId,int? marcaId){var q=d.Productos.AsEnumerable();if(!string.IsNullOrWhiteSpace(buscar))q=q.Where(x=>x.Nombre.Contains(buscar,StringComparison.OrdinalIgnoreCase));if(categoriaId.HasValue)q=q.Where(x=>x.CategoriaId==categoriaId);if(marcaId.HasValue)q=q.Where(x=>x.MarcaId==marcaId);return Ok(q);}[HttpGet("{id:int}")]public IActionResult Get(int id){var x=d.Productos.FirstOrDefault(a=>a.Id==id);return x is null?NotFound(new{mensaje="Producto no encontrado"}):Ok(x);}}
